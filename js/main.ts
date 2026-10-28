@@ -30,6 +30,8 @@ import './core/SaveLoadTest'; // Import for manual testing
 import { VisualEffectsSystem } from './core/VisualEffects';
 import './core/VisualEffectsTest'; // Import for manual testing
 import { Vector2 } from './utils/Vector2';
+import { Analytics } from './core/Analytics';
+import { Operator } from './core/OperatorSettings';
 // --- Global Variables Setup ---
 // Global input manager reference (will be set after async import)
 let globalInputManager: any = null;
@@ -884,6 +886,7 @@ function startGameFromTitle(playerCount: number = 1) {
 
     gameState.playerInvulnerableTime = GameConfig.RESPAWN_INVULNERABILITY_TIME;
 
+    Analytics.gameStart(playerCount, Operator.get().difficulty);
     startNextWave();
     // Hold play while the first wave beams in, as the arcade does.
     gameState.currentGameState = 'WAVE_TRANSITION';

@@ -21,6 +21,7 @@ import { ScorePopup } from './core/ScorePopup';
 import { WaveTransition } from './core/WaveTransition';
 import { Operator } from './core/OperatorSettings';
 import { DeathBeat } from './core/DeathBeat';
+import { Analytics } from './core/Analytics';
 
 // --- High Score ---
 export function loadHighScore() {
@@ -142,6 +143,7 @@ export function playerHit() {
     const outcome = TwoPlayer.onDeath();
     if (outcome === 'game_over') {
         gameState.currentGameState = 'GAME_OVER';
+        Analytics.gameOver(TwoPlayer.scores(), gameState.wave, TwoPlayer.isTwoPlayer() ? 2 : 1);
         if (UI && UI.showGameOverScreen) UI.showGameOverScreen();   // plays the death beat itself
         if (UI && UI.updateUI) UI.updateUI();
         return;
@@ -251,6 +253,7 @@ export function startNextWave() {
     }
     gameState.wave++;
     console.log(`Starting Wave: ${gameState.wave}`);
+    if (gameState.currentGameState !== 'DEMO_PLAY') Analytics.waveReached(gameState.wave);
     ArcadeBorder.setWave(gameState.wave);
     gameState.currentHumanRescueBonus = GameConfig.INITIAL_HUMAN_RESCUE_BONUS;
     gameState.humanRescueBonusDecayTimer = 0;
